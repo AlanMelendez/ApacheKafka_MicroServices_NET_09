@@ -6,7 +6,7 @@ using Ticketing.Command.Domain.Extensions;
 namespace Ticketing.Command.Domain.Models
 {
     [BsonCollection("eventStores")]
-    public class EventModel<T> : Document
+    public class EventModel : Document
     {
         [BsonElement("timestamp")]
         public DateTime TimeStep { get; set; }
