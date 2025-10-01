@@ -7,6 +7,5 @@ namespace Ticketing.Command.Domain.Abstracts
     {
         IQueryable<TDocument> AsQueryable();
         Task<TDocument> InsertOneAsync(TDocument document, IClientSessionHandle clientSesionHandle, CancellationToken cancellation);
-
     }
 }
