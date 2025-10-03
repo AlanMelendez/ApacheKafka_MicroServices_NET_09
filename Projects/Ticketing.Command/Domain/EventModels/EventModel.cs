@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using Ticketing.Command.Domain.Class;
 using Ticketing.Command.Domain.Extensions;
 
-namespace Ticketing.Command.Domain.Models
+namespace Ticketing.Command.Domain.EventModels
 {
     [BsonCollection("eventStores")]
     public class EventModel : Document

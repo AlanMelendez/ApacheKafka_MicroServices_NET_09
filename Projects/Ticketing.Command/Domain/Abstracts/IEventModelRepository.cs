@@ -1,4 +1,4 @@
-﻿using Ticketing.Command.Domain.Models;
+﻿using Ticketing.Command.Domain.EventModels;
 
 namespace Ticketing.Command.Domain.Abstracts
 {
