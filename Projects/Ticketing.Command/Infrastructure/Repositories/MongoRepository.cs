@@ -32,37 +32,31 @@ namespace Ticketing.Command.Infrastructure.Repositories
 
         public IQueryable<TDocument> AsQueryable()
         {
-            throw new NotImplementedException();
+            return _collection.AsQueryable();
         }
 
         public Task<IClientSessionHandle> BeginSessionAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var option = new ClientSessionOptions();
+            option.DefaultTransactionOptions = new TransactionOptions();
+            return _collection.Database.Client.StartSessionAsync(option, cancellationToken);
+
+
         }
 
-        public void BeginTransaction(IClientSessionHandle session)
+        public void BeginTransaction(IClientSessionHandle session) => session.StartTransaction();
+
+        public Task CommitTransactionAsync(IClientSessionHandle session, CancellationToken cancellationToken = default) => session.CommitTransactionAsync(cancellationToken);
+        
+
+        public void DisposeSession(IClientSessionHandle session) => session.Dispose();
+        
+
+        public async Task InsertOneAsync(TDocument document, IClientSessionHandle clientSesionHandle, CancellationToken cancellation)
         {
-            throw new NotImplementedException();
+            await _collection.InsertOneAsync(clientSesionHandle, document, cancellationToken: cancellation);
         }
 
-        public Task CommitTransactionAsync(IClientSessionHandle session, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DisposeSession(IClientSessionHandle session)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TDocument> InsertOneAsync(TDocument document, IClientSessionHandle clientSesionHandle, CancellationToken cancellation)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RollBackTransactionAsync(IClientSessionHandle session, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
+        public Task RollBackTransactionAsync(IClientSessionHandle session, CancellationToken cancellationToken = default) => session.AbortTransactionAsync();
     }
 }

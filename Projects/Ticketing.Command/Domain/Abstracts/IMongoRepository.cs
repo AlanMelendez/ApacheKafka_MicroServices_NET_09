@@ -6,6 +6,6 @@ namespace Ticketing.Command.Domain.Abstracts
     public interface IMongoRepository<TDocument> : ISession where TDocument : IDocument
     {
         IQueryable<TDocument> AsQueryable();
-        Task<TDocument> InsertOneAsync(TDocument document, IClientSessionHandle clientSesionHandle, CancellationToken cancellation);
+        Task InsertOneAsync(TDocument document, IClientSessionHandle clientSesionHandle, CancellationToken cancellation);
     }
 }
