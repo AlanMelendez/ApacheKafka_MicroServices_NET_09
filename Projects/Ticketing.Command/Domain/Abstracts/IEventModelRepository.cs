@@ -4,5 +4,6 @@ namespace Ticketing.Command.Domain.Abstracts
 {
     public interface IEventModelRepository: IMongoRepository<EventModel>
     {
+
     }
 }
