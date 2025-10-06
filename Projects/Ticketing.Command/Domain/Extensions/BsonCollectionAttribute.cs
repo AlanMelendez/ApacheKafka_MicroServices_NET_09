@@ -5,8 +5,8 @@
     public class BsonCollectionAttribute: Attribute
     {
         public string tableName {  get; set; }
-        public BsonCollectionAttribute(string tableName) { 
-            tableName = tableName ?? throw new ArgumentNullException(nameof(tableName));
+        public BsonCollectionAttribute(string _tableName) { 
+            tableName = _tableName ?? throw new ArgumentNullException(nameof(_tableName));
         }
     }
 }

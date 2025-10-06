@@ -1,8 +1,19 @@
+using MediatR;
+using Ticketing.Command.Application.Extension;
+using Ticketing.Command.Features.Tickets;
+using Ticketing.Command.Infrastructure.Extension;
+using static Ticketing.Command.Features.Tickets.TicketCreate;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+
+//Register Extensions Services here:
+builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -32,6 +43,19 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast");
+
+
+app.MapGet("/test", () => "Hello World!")
+   .WithName("TestMessage");
+
+app.MapPost("/api/ticket", async (IMediator mediator, TicketCreateRequest request, CancellationToken cancellationToken) =>
+{
+
+    var command = new TicketCreateCommand(request);
+    var response = await mediator.Send(command, cancellationToken);
+
+    return Results.Ok(response);
+}).WithName("CreateTicket");
 
 app.Run();
 

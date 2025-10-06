@@ -13,20 +13,22 @@ namespace Ticketing.Command.Features.Tickets
     {
 
         //Create class with init properties and don't allow inheritance with sealed
-        public sealed class TicketCreateRequest(string username, string typeError, string detailError) 
+        public sealed class TicketCreateRequest(string username, string typeError, string detailError)
         {
             public string Username { get; set; } = username;
-            public string TypeError { get; set; } =  typeError;
+            public string TypeError { get; set; } = typeError;
             public string DetailError { get; set; } = detailError;
         }
 
         //Using record to create an immutable object to represent the command and implement IRequest from MediatR to indicate that this command will return a boolean value
-        public record TicketCreateCommand(TicketCreateRequest ticketCreateRequest): IRequest<bool>;
+        public record TicketCreateCommand(TicketCreateRequest ticketCreateRequest) : IRequest<bool>;
 
 
-        public class TicketCreateValidator : AbstractValidator<TicketCreateRequest> {
+        public class TicketCreateValidator : AbstractValidator<TicketCreateRequest>
+        {
 
-            public TicketCreateValidator() {
+            public TicketCreateValidator()
+            {
                 RuleFor(rule => rule.Username).NotEmpty().WithMessage("Please insert an username.");
                 RuleFor(rule => rule.DetailError).NotEmpty().WithMessage("Please introduce a message detail error.");
             }
@@ -73,7 +75,7 @@ namespace Ticketing.Command.Features.Tickets
                 try
                 {
                     //First init the transaction
-                     _eventModelRepository.BeginTransaction(session);
+                    _eventModelRepository.BeginTransaction(session);
 
                     //Insert the eventModel object in the database
                     await _eventModelRepository.InsertOneAsync(eventModel, session, cancellationToken);
@@ -90,11 +92,13 @@ namespace Ticketing.Command.Features.Tickets
                     await _eventModelRepository.RollBackTransactionAsync(session, cancellationToken);
 
                     return false;
-                }finally
+                }
+                finally
                 {
                     // after close the connection, delete the obj session to free memory.
                     _eventModelRepository.DisposeSession(session);
                 }
+            }
         }
     }
 }

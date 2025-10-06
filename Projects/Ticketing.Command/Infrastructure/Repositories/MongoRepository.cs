@@ -16,7 +16,7 @@ namespace Ticketing.Command.Infrastructure.Repositories
         public MongoRepository(IMongoClient mongoClient, IOptions<MongoSettings> options)
         {
             _collection = mongoClient
-                .GetDatabase(options.Value.DatabaseName) // Database name
+                .GetDatabase(options.Value.Database) // Database name
                 .GetCollection<TDocument>(GetCollectionName(
                     typeof(TDocument) //Get collection name from document class name dynamically
                  )); 
