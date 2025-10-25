@@ -8,8 +8,8 @@ namespace Ticketing.Command.Domain.EventModels
     [BsonCollection("eventStores")]
     public class EventModel : Document
     {
-        [BsonElement("timestamp")]
-        public DateTime TimeStep { get; set; }
+        [BsonElement("timestamp")] //Name of the field in MongoDB (name of th e column like ef core)
+        public DateTime TimeStamp { get; set; }
 
         [BsonElement("aggregateIdentifier")]
         public required string AggregateIdentifier { get; set; }
@@ -26,3 +26,4 @@ namespace Ticketing.Command.Domain.EventModels
         public BaseEvent? EventData {get; set;}
     }
 }
+    

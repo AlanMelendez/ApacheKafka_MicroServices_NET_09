@@ -64,7 +64,7 @@ namespace Ticketing.Command.Features.Tickets
                     AggregateIdentifier = Guid.CreateVersion7(DateTimeOffset.UtcNow).ToString(),
                     AggregateType = "TicketAggregate",
                     EventType = "TicketCreated",
-                    TimeStep = DateTime.UtcNow,
+                    TimeStamp = DateTime.UtcNow,
                     Version = "1.0",
                     EventData = ticketEventData
                 };

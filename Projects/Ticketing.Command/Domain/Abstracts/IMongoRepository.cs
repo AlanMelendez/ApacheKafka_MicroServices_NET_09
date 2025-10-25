@@ -3,9 +3,9 @@ using Ticketing.Command.Domain.Interfaces;
 
 namespace Ticketing.Command.Domain.Abstracts
 {
-    public interface IMongoRepository<TDocument> : ISession where TDocument : IDocument
+    public interface IMongoRepository<T> : ISession where T : IDocument
     {
-        IQueryable<TDocument> AsQueryable();
-        Task InsertOneAsync(TDocument document, IClientSessionHandle clientSesionHandle, CancellationToken cancellation);
+        IQueryable<T> AsQueryable(); // Return IQueryable collection of T documents from MongoDB (useful for LINQ queries)
+        Task InsertOneAsync(T document, IClientSessionHandle clientSesionHandle, CancellationToken cancellation); // Insert a single document into MongoDB
     }
 }
