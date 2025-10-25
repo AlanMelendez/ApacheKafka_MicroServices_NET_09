@@ -14,19 +14,15 @@ services:
       interval: 5s
       timeout: 30s
       start_period: 0s
-      start_interval: 1s
       retries: 30
     volumes:
       - mongodb_data:/data/db
       - mongodb_config:/data/configdb
-
 volumes:
   mongodb_data:
     driver: local
   mongodb_config:
     driver: local
-
 networks:
   default:
     name: microserviceNetwork
-  
