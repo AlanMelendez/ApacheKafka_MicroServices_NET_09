@@ -7,30 +7,37 @@ using Ticketing.Command.Domain.Interfaces;
 
 namespace Ticketing.Command.Infrastructure.Repositories
 {
-    public class MongoRepository<TDocument> : IMongoRepository<TDocument> where TDocument : IDocument
+    public class MongoRepository<T> : IMongoRepository<T> where T : IDocument
     {
 
         //Define table name using to connect with mongo db
-        private readonly IMongoCollection<TDocument> _collection;
+        private readonly IMongoCollection<T> _collection;
 
         public MongoRepository(IMongoClient mongoClient, IOptions<MongoSettings> options)
         {
             _collection = mongoClient
                 .GetDatabase(options.Value.Database) // Database name
-                .GetCollection<TDocument>(GetCollectionName(
-                    typeof(TDocument) //Get collection name from document class name dynamically
+                .GetCollection<T>(GetCollectionName(
+                    typeof(T) //Get collection name from document class name dynamically
                  )); 
         }
 
         private protected string GetCollectionName(Type documentType)
         {
+
+            /**
+             *? Get all atributes from this type document.. later we use "GetCustomAttributes" to filter only BsonCollectionAttribute
+             *? BsonCollectionAttribute is a custom attribute that we created in Domain/Extensions/BsonCollectionAttribute.cs it's used to define the collection name for each document
+             *? If the document class doesn't have the BsonCollectionAttribute, we throw an exception
+             *? Remembet that BsonCollectionAttribute has a property called "tableName" that contains the name of the collection, and it's used to connect with mongo db
+             **/
             var nameCollection = documentType.GetCustomAttributes(typeof(BsonCollectionAttribute), true)
                  .FirstOrDefault();
 
             return nameCollection == null ? throw new ArgumentException("Collection name not found") : (nameCollection as BsonCollectionAttribute)!.tableName;
         }
 
-        public IQueryable<TDocument> AsQueryable()
+        public IQueryable<T> AsQueryable()
         {
             return _collection.AsQueryable();
         }
@@ -52,7 +59,7 @@ namespace Ticketing.Command.Infrastructure.Repositories
         public void DisposeSession(IClientSessionHandle session) => session.Dispose();
         
 
-        public async Task InsertOneAsync(TDocument document, IClientSessionHandle clientSesionHandle, CancellationToken cancellation)
+        public async Task InsertOneAsync(T document, IClientSessionHandle clientSesionHandle, CancellationToken cancellation)
         {
             await _collection.InsertOneAsync(clientSesionHandle, document, cancellationToken: cancellation);
         }
