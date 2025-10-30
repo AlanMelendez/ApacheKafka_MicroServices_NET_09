@@ -1,46 +1,41 @@
-## Comands to generate the project with SDK version 
+## How to Run the Project
 
+This guide assumes you have Docker and .NET 9 SDK installed.
 
-## Configuration VHost in linux Machine
+### 1. Start the Database
+First, get the MongoDB container running. This setup uses a replica set, which is necessary for transactions.
+
 ```bash
- cd sudo nano /etc/docker/daemon.json
+# This command starts MongoDB in the background and forces a recreate to apply any changes.
+docker compose up -d --force-recreate
 ```
-add the following lines
-```json
-{
-  "hosts": ["unix:///var/run/docker.sock"],
-  "bip": "172.17.0.1/16"
-}
-```
-or maybe you may add permanently to /etc/hosts file the following line
+Wait a few seconds for the container's health check to initialize the replica set. You can check the container logs or status to be sure.
+
+### 2. Run the API Services
+With the database ready, you can start the .NET applications.
+
 ```bash
-echo "172.17.0.1 host.docker.internal" | sudo tee -a /etc/hosts
+# Run the Command API (handles writes)
+dotnet run --project Projects/Ticketing.Command
 ```
-then restart docker service
+
 ```bash
-sudo systemctl restart docker
+# In a separate terminal, run the Query API (handles reads)
+dotnet run --project Projects/Ticketing.Query
 ```
 
-#### How can work the last configuration?
-When you run docker containers in linux machine, the docker engine create a network bridge with a default
-IP range (172.17.0.0/16) and assigns a unique IP address to each container from this range. The host machine can access the containers using the IP address assigned to them. However, the containers cannot access the host machine directly using localhost or host.docker.internal because these addresses resolve to the container's own network namespace, not the host's.
-
-To allow containers to access services running on the host machine, you can use the host's IP address within the bridge network. In this case, the host's IP address in the default bridge network is typically 172.17.0.1. By adding an entry to the /etc/hosts file inside the container that maps host.docker.internal to 172.17.0.1, you can enable this communication.
-
+The `Ticketing.Command` API will now be running and able to connect to the MongoDB replica set.
 
 ---
-<!-- ----------------------------------------------------------------------------
-    Separation between Docker configuration / explanations and the SDK/project steps
-    Use this horizontal rule to clearly divide configuration sections from build/setup
----------------------------------------------------------------------------- -->
----
 
+## Project Setup from Scratch
 
+These were the commands used to generate the initial project structure. You don't need to run them again.
 
-## List all SDKs installed in your machine
+### List all SDKs installed in your machine
 ```bash
 dotnet --list-sdks
-# 9.0.304 [C:\Program Files\dotnet\sdk]
+# Example output: 9.0.304 [C:\Program Files\dotnet\sdk]
 ```
 ### Create file global.json with the SDK version you want to use
 ```bash
@@ -50,7 +45,6 @@ dotnet new globaljson --sdk-version 9.0.304 --force
 ### Create Solution Project
 ```bash
 dotnet new sln --name Microservices
-
 ```
 
 ### Create Projects
@@ -75,16 +69,6 @@ dotnet sln add Projects/Ticketing.Query
 ```bash
 dotnet build
 ```
-
-```bash
-dotnet run --project Projects/Ticketing.Command
-```
-
-```bash
-dotnet run --project Projects/Ticketing.Query
-```
-
-
 
 ## Generate command project to communicate between microservices
 ```bash
@@ -115,10 +99,9 @@ dotnet add package Newtonsoft.Json --version 13.0.3
 2. Open Visual Studio Code.
 3. Go to the "MongoDB" extension panel on the left sidebar.
 4. Click on the "Connect" button (usually represented by a plug icon).
-5. In the connection dialog, enter the following connection string:
+5. In the connection dialog, enter the following connection string. Using `replicaSet=rs0` is important for it to work correctly with the project's setup.
     ```
-    mongodb://host.docker.internal:27017 
-    mongodb://172.18.0.1:27017/?replicaSet=rs0&tls=false
+    mongodb://localhost:27017/?replicaSet=rs0
     ```
 6. Click "Connect" to establish the connection to the MongoDB instance running in your Docker container.
 
