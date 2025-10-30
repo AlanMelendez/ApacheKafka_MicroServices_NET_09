@@ -24,15 +24,6 @@ namespace Ticketing.Command.Features.Tickets
         public record TicketCreateCommand(TicketCreateRequest ticketCreateRequest) : IRequest<bool>;
 
 
-        public class TicketCreateValidator : AbstractValidator<TicketCreateRequest>
-        {
-
-            public TicketCreateValidator()
-            {
-                RuleFor(rule => rule.Username).NotEmpty().WithMessage("Please insert an username.");
-                RuleFor(rule => rule.DetailError).NotEmpty().WithMessage("Please introduce a message detail error.");
-            }
-        }
 
         /** Validator class for the TicketCreateCommand class
          * It uses the TicketCreateValidator to validate the ticketCreateRequest property
@@ -46,6 +37,15 @@ namespace Ticketing.Command.Features.Tickets
         }
 
 
+        public class TicketCreateValidator : AbstractValidator<TicketCreateRequest>
+        {
+
+            public TicketCreateValidator()
+            {
+                RuleFor(rule => rule.Username).NotEmpty().WithMessage("Please insert an username.");
+                RuleFor(rule => rule.DetailError).NotEmpty().WithMessage("Please introduce a message detail error.");
+            }
+        }
 
         public sealed class TicketCreateCommandHandler(
             IEventModelRepository eventModelRepository,

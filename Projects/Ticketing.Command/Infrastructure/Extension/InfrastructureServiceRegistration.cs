@@ -10,6 +10,8 @@ namespace Ticketing.Command.Infrastructure.Extension
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
+
+            //
             BsonClassMap.RegisterClassMap<BaseEvent>();
             BsonClassMap.RegisterClassMap<TicketCreatedEvent>();
 
@@ -17,6 +19,7 @@ namespace Ticketing.Command.Infrastructure.Extension
 
 
             services.AddTransient<IEventModelRepository, EventModelRepository>();
+            
             services.AddSingleton<IMongoClient, MongoClient>(
                 cfg => new MongoClient(configuration.GetConnectionString("MongoDb"))
             ); // Unique connection to database

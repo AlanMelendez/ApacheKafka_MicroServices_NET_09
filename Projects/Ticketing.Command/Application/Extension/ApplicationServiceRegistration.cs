@@ -24,7 +24,7 @@ namespace Ticketing.Command.Application.Extension
             services.AddValidatorsFromAssembly(typeof(ApplicationServiceRegistration).Assembly);
 
 
-            //Register AutoMapper
+            //Register AutoMapper (using Assembly to register all profiles automatically)
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
             return services;

@@ -42,11 +42,11 @@ namespace Ticketing.Command.Infrastructure.Repositories
             return _collection.AsQueryable();
         }
 
-        public Task<IClientSessionHandle> BeginSessionAsync(CancellationToken cancellationToken = default)
+        public async Task<IClientSessionHandle> BeginSessionAsync(CancellationToken cancellationToken = default)
         {
             var option = new ClientSessionOptions();
             option.DefaultTransactionOptions = new TransactionOptions();
-            return _collection.Database.Client.StartSessionAsync(option, cancellationToken);
+            return await _collection.Database.Client.StartSessionAsync(option, cancellationToken);
 
 
         }
@@ -59,9 +59,9 @@ namespace Ticketing.Command.Infrastructure.Repositories
         public void DisposeSession(IClientSessionHandle session) => session.Dispose();
         
 
-        public async Task InsertOneAsync(T document, IClientSessionHandle clientSesionHandle, CancellationToken cancellation)
+        public async Task InsertOneAsync(T document, IClientSessionHandle clientSesionHandle, CancellationToken cancellationToken)
         {
-            await _collection.InsertOneAsync(clientSesionHandle, document, cancellationToken: cancellation);
+            await _collection.InsertOneAsync(clientSesionHandle, document, cancellationToken : cancellationToken);
         }
 
         public Task RollBackTransactionAsync(IClientSessionHandle session, CancellationToken cancellationToken = default) => session.AbortTransactionAsync();
