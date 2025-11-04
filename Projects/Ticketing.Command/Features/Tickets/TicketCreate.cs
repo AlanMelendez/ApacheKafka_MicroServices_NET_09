@@ -5,12 +5,18 @@ using MediatR;
 using MongoDB.Driver;
 using Ticketing.Command.Domain.Abstracts;
 using Ticketing.Command.Domain.EventModels;
+using Ticketing.Command.Features.Api;
 
 namespace Ticketing.Command.Features.Tickets
 {
 
-    public class TicketCreate
+    public class TicketCreate : IMinimalApi
     {
+         public void AddEndpoint(IEndpointRouteBuilder routeBuilder)
+        {
+            //Here add definitions of the endpoints for the minimal API (e.g., POST, GET, etc. methods)
+            throw new NotImplementedException();
+        }
 
         //Create class with init properties and don't allow inheritance with sealed
         public sealed class TicketCreateRequest(string username, string typeError, string detailError)
@@ -22,7 +28,6 @@ namespace Ticketing.Command.Features.Tickets
 
         //Using record to create an immutable object to represent the command and implement IRequest from MediatR to indicate that this command will return a boolean value
         public record TicketCreateCommand(TicketCreateRequest ticketCreateRequest) : IRequest<bool>;
-
 
 
         /** Validator class for the TicketCreateCommand class
@@ -100,5 +105,7 @@ namespace Ticketing.Command.Features.Tickets
                 }
             }
         }
+
+       
     }
 }
