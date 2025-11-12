@@ -10,12 +10,21 @@ using Ticketing.Command.Features.Api;
 namespace Ticketing.Command.Features.Tickets
 {
 
-    public class TicketCreate : IMinimalApi
+    public sealed class TicketCreate : IMinimalApi
     {
-         public void AddEndpoint(IEndpointRouteBuilder routeBuilder)
+        public void AddEndpoint(IEndpointRouteBuilder routeBuilder)
         {
             //Here add definitions of the endpoints for the minimal API (e.g., POST, GET, etc. methods)
-            throw new NotImplementedException();
+            routeBuilder.MapPost("/api/ticket", async (
+                TicketCreateRequest ticketCreateRequest,
+                IMediator mediator,
+                CancellationToken cancellationToken
+            ) =>
+            {
+                var command = new TicketCreateCommand(ticketCreateRequest);
+                var res = await mediator.Send(command);
+                return Results.Ok(res);
+            });
         }
 
         //Create class with init properties and don't allow inheritance with sealed
