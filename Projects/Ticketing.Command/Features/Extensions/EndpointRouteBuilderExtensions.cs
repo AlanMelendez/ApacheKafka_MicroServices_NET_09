@@ -3,7 +3,7 @@ namespace Ticketing.Command.Features.Api
     public static class EndpointRouteBuilderExtensions
     {
         
-        public static IEndpointRouteBuilder AddAllMinimalApiEndpoints(this IEndpointRouteBuilder routeBuilder)
+        public static IEndpointRouteBuilder MapAllMinimalApiEndpoints(this IEndpointRouteBuilder routeBuilder)
         {
             //Get all class's wich implement "IMinimalApi"
             var listMinimalAPis = routeBuilder.ServiceProvider.GetServices<IMinimalApi>();

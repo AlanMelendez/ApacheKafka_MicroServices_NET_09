@@ -1,5 +1,7 @@
 using MediatR;
 using Ticketing.Command.Application.Extension;
+using Ticketing.Command.Features.Api;
+using Ticketing.Command.Features.Extensions;
 using Ticketing.Command.Features.Tickets;
 using Ticketing.Command.Infrastructure.Extension;
 using static Ticketing.Command.Features.Tickets.TicketCreate;
@@ -9,6 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+//Register the minimal Apis with the service collection which we were created:
+builder.Services.RegisterAllMinimalApisLikeServices();
+
 
 
 //Register Extensions Services here:
@@ -56,6 +62,9 @@ app.MapPost("/api/ticket", async (IMediator mediator, TicketCreateRequest reques
 
     return Results.Ok(response);
 }).WithName("CreateTicket");
+
+
+app.MapAllMinimalApiEndpoints();
 
 app.Run();
 
