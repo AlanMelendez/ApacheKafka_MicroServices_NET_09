@@ -59,6 +59,7 @@ dotnet new webapi --output Projects/Ticketing.Query
 ### Add Projects to Solution
 ```bash
 dotnet sln add Projects/Ticketing.Command
+dotnet add package Scalar.AspNetCore --version 2.0.2
 ```
 
 ```bash
