@@ -108,3 +108,19 @@ dotnet add package Newtonsoft.Json --version 13.0.3
 
 
 
+
+
+
+
+
+
+
+
+
+## Scalar API interface xdxdxd
+``bash
+dotnet watch --project Projects/Ticketing.Command/
+``
+
+
+
