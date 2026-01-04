@@ -21,7 +21,8 @@ namespace Ticketing.Command.Features.Tickets
                 CancellationToken cancellationToken
             ) =>
             {
-                var command = new TicketCreateCommand(ticketCreateRequest);
+                var id = Guid.CreateVersion7(DateTimeOffset.UtcNow).ToString();
+                var command = new TicketCreateCommand(id,ticketCreateRequest);
                 var res = await mediator.Send(command);
                 return Results.Ok(res);
             });
@@ -36,7 +37,10 @@ namespace Ticketing.Command.Features.Tickets
         }
 
         //Using record to create an immutable object to represent the command and implement IRequest from MediatR to indicate that this command will return a boolean value
-        public record TicketCreateCommand(TicketCreateRequest ticketCreateRequest) : IRequest<bool>;
+        public record TicketCreateCommand(
+            string Id,
+            TicketCreateRequest ticketCreateRequest
+        ) : IRequest<bool>;
 
 
         /** Validator class for the TicketCreateCommand class
@@ -47,6 +51,8 @@ namespace Ticketing.Command.Features.Tickets
             public TicketCreateCommandValidator()
             {
                 RuleFor(validation => validation.ticketCreateRequest).SetValidator(new TicketCreateValidator());
+            
+                RuleFor(validation => validation.Id).NotEmpty().WithMessage("The Id field cannot be empty.");
             }
         }
 
